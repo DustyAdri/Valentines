@@ -1,0 +1,1052 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Valentines Day</title>
+  <style>
+
+    :root{
+        --star-width: 24.5%;
+        --mask-width: 24%;
+        --center-nudge-y: 0px;
+        --pink: #FF6EB7;
+        --purple: #7A299C;
+        --env-bg: #1e003c;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    @font-face {
+        font-family: 'TAN Tangkiwood';
+        src: url('fonts/TAN-Tangkiwood-Regular.woff2') format('woff2'),
+             url('fonts/TAN-Tangkiwood-Regular.ttf') format('truetype'),
+             url('fonts/TAN-Tangkiwood-Regular.otf') format('opentype');
+        
+        font-weight: normal;
+        font-style: normal;
+        font-display: swap;
+    }
+
+    body, html {
+      width: 100%;
+      height: 100vh;
+      background-color: #1e003c;
+      position: relative;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+      overflow-x: hidden;
+      scroll-behavior: smooth;
+    }
+
+    #scroll-bg {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 1;
+        overflow: hidden;
+        pointer-events: none;
+    }
+
+        /* Waves - Right Side */
+    .waves-right, .waves-left {
+        position: absolute;
+        top: -20vh;
+        width: 50vw;
+        height: 2349.407px;
+        left: 70%;
+        overflow: visible;
+        pointer-events: none;
+        z-index: 1;
+        transition: transform 0.1s ease-out;
+        pointer-events: none; 
+        max-height: 200%;
+    }
+
+    .waves-right{
+        right: -15vw;
+        left: auto;
+        transform: translateX(20%);
+    }
+
+    .waves-left{
+        left: -12vw;
+        transform: rotate(180deg) translateX(35%);
+        right: auto;
+    }
+
+    /* --- SECTION 1: THE ENVELOPEE --- */
+    .heart {
+      position: absolute;
+      fill: var(--pink);
+      stroke: var(--pink);
+      animation: twinkle 2.5s ease-in-out forwards;
+      transform-origin: center;
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    @keyframes twinkle {
+      0% { opacity: 0; transform: scale(0.5); }
+      40% { opacity: 1; transform: scale(1); }
+      60% { opacity: 1; transform: scale(1); }
+      100% { opacity: 0; transform: scale(0.5); }
+    }
+
+    .heart.big {
+        width: 64px;
+        height: 64px;
+        animation: floatUp 3s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+        z-index: 7;
+        opacity: 0;
+    }
+
+    @keyframes floatUp {
+        0% {
+            opacity: 0;
+            transform: translateY(0) scale(0.5);
+        }
+
+        15% {
+            opacity: 1;
+        }
+
+        80% {
+            opacity: 1;
+        }
+
+        100% {
+            opacity: 0; transform: translateY(-500px) scale(1.2);
+        }
+    }
+
+    .container {
+        position: relative;
+        width: 100%;
+        min-height: 100vh;
+        justify-content: center;
+        align-items: center;
+        display: flex;
+    }
+
+    .mail-card {
+        position: absolute;
+        left: 50%;
+        top: 357px; 
+        transform: translateX(-50%);
+        z-index: 3;
+        width: min(70vw, 573.626px);
+        max-width: 90%;
+        pointer-events: auto;
+        perspective: 1000px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 18px; 
+    }
+
+    .envelope {
+        position: relative;
+        width: 100%;
+        pointer-events: auto;
+        transform-style: preserve-3d;
+        transition: transform 0.4s ease;
+    }
+
+    .envelope-border {
+        position: relative;
+        width: 100%;
+        aspect-ratio: 573.626 / 310;
+        background: #1e003c;
+        overflow: visible;
+        border: 17px solid #ff6eb7;
+        border-radius: 50px;
+        box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+        background-clip: padding-box;
+        z-index: 6;
+        transform-style: preserve-3d;
+    }
+    
+    .inner {
+        position: absolute;
+        top: -60%;
+        left: 5%;
+        right: 5%;
+        height: 60%;
+        background: #2d005a;
+        clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+        z-index: 2;
+        transform-origin: center bottom;
+        transform: translateY(0) rotate(180deg);
+        transition: transform 0.6s ease, opacity 0.3s;
+        pointer-events: none;
+    }
+
+    /* THE FLAP ANIMATION */
+    .flap-affiliated {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        display: block;
+        transform-origin: top; 
+        transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        transform-style: preserve-3d;
+        z-index: 10; /* Sits on top initially */
+    }
+
+    .envelope.open .flap-affiliated {
+        transform: rotateX(180deg);
+        z-index: 1; /* Move behind the paper when opened */
+    }
+
+    /* Keep the Star/Mask visible during flip */
+    .star-container, .mask-group {
+        backface-visibility: visible;
+    }
+
+    .flap {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 0;
+      height: 112%;
+      background: var(--env-bg);
+      clip-path: polygon(0% 0%, 100% 0%, 50% 50%);
+      transform-origin: top;
+      z-index: 5;
+    }
+
+    /* STYLING FOR THE SVG LINES ON THE FLAP */
+    .envelope-lines {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 11;
+    }
+
+    .envelope-lines line {
+        stroke-width: 5;
+    }
+
+    /* Star */
+    .star-container, .mask-group {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: opacity 0.3s;
+    }
+
+    .star-container {
+        width: var(--star-width);
+        max-width: 160px;
+        z-index: 12;
+    }
+
+    .star-inner {
+        transform: rotate(-1.0) skewX(-0.18deg);
+        width: 100%;
+    }
+
+    .star-inner svg {
+        width: 100%;
+        height: 100%;
+        display: block;
+    }
+
+    .mask-group {
+        width: var(--mask-width);
+        max-width: 200px;
+        z-index: 13;
+        backface-visibility: hidden;
+    }
+
+    .masked-image {
+        width: 100%;
+        height: 100%;
+        -webkit-mask-image: url('data:image/svg+xml,%3Csvg%20preserveAspectRatio%3D%22none%22%20width%3D%22100%25%22%20height%3D%22100%25%22%20overflow%3D%22visible%22%20style%3D%22display%3A%20block%3B%22%20viewBox%3D%220%200%20111.08%20111.651%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Cpath%20id%3D%22Star%202%22%20d%3D%22M47.5966%203.52066C51.8502%20-1.17355%2059.23%20-1.17355%2063.4837%203.52066V3.52066C66.3042%206.63326%2070.6853%207.81091%2074.6856%206.53009V6.53009C80.7031%204.60344%2087.0835%208.33184%2088.4265%2014.5059V14.5059C89.3201%2018.6142%2092.5313%2021.8571%2096.6376%2022.7601V22.7601C102.816%2024.1187%20106.48%2030.5372%20104.57%2036.5683V36.5683C103.299%2040.5834%20104.463%2045.0001%20107.568%2047.8449V47.8449C112.251%2052.1347%20112.251%2059.5159%20107.568%2063.8057V63.8057C104.463%2066.6506%20103.299%2071.0673%20104.57%2075.0823V75.0823C106.48%2081.1134%20102.816%2087.5319%2096.6376%2088.8906V88.8906C92.5313%2089.7936%2089.3201%2093.0364%2088.4265%2097.1448V97.1448C87.0835%20103.319%2080.7031%20107.047%2074.6856%20105.121V105.121C70.6853%20103.84%2066.3042%20105.017%2063.4837%20108.13V108.13C59.23%20112.824%2051.8502%20112.824%2047.5966%20108.13V108.13C44.7761%20105.017%2040.395%20103.84%2036.3946%20105.121V105.121C30.3771%20107.047%2023.9967%20103.319%2022.6538%2097.1448V97.1448C21.7601%2093.0364%2018.549%2089.7936%2014.4427%2088.8906V88.8906C8.26394%2087.5319%204.60001%2081.1134%206.51012%2075.0823V75.0823C7.78173%2071.0673%206.61767%2066.6506%203.51213%2063.8057V63.8057C-1.17071%2059.5159%20-1.17071%2052.1347%203.51213%2047.8449V47.8449C6.61767%2045.0001%207.78173%2040.5834%206.51012%2036.5683V36.5683C4.60001%2030.5372%208.26394%2024.1187%2014.4427%2022.7601V22.7601C18.549%2021.8571%2021.7601%2018.6142%2022.6538%2014.5059V14.5059C23.9967%208.33184%2030.3771%204.60343%2036.3946%206.53009V6.53009C40.395%207.81091%2044.7761%206.63326%2047.5966%203.52066V3.52066Z%22%20fill%3D%22var(--fill-0%2C%20%237A299C)%22%2F%3E%0A%3C%2Fsvg%3E%0A');
+        mask-image: url('data:image/svg+xml,%3Csvg%20preserveAspectRatio%3D%22none%22%20width%3D%22100%25%22%20height%3D%22100%25%22%20overflow%3D%22visible%22%20style%3D%22display%3A%20block%3B%22%20viewBox%3D%220%200%20111.08%20111.651%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Cpath%20id%3D%22Star%202%22%20d%3D%22M47.5966%203.52066C51.8502%20-1.17355%2059.23%20-1.17355%2063.4837%203.52066V3.52066C66.3042%206.63326%2070.6853%207.81091%2074.6856%206.53009V6.53009C80.7031%204.60344%2087.0835%208.33184%2088.4265%2014.5059V14.5059C89.3201%2018.6142%2092.5313%2021.8571%2096.6376%2022.7601V22.7601C102.816%2024.1187%20106.48%2030.5372%20104.57%2036.5683V36.5683C103.299%2040.5834%20104.463%2045.0001%20107.568%2047.8449V47.8449C112.251%2052.1347%20112.251%2059.5159%20107.568%2063.8057V63.8057C104.463%2066.6506%20103.299%2071.0673%20104.57%2075.0823V75.0823C106.48%2081.1134%20102.816%2087.5319%2096.6376%2088.8906V88.8906C92.5313%2089.7936%2089.3201%2093.0364%2088.4265%2097.1448V97.1448C87.0835%20103.319%2080.7031%20107.047%2074.6856%20105.121V105.121C70.6853%20103.84%2066.3042%20105.017%2063.4837%20108.13V108.13C59.23%20112.824%2051.8502%20112.824%2047.5966%20108.13V108.13C44.7761%20105.017%2040.395%20103.84%2036.3946%20105.121V105.121C30.3771%20107.047%2023.9967%20103.319%2022.6538%2097.1448V97.1448C21.7601%2093.0364%2018.549%2089.7936%2014.4427%2088.8906V88.8906C8.26394%2087.5319%204.60001%2081.1134%206.51012%2075.0823V75.0823C7.78173%2071.0673%206.61767%2066.6506%203.51213%2063.8057V63.8057C-1.17071%2059.5159%20-1.17071%2052.1347%203.51213%2047.8449V47.8449C6.61767%2045.0001%207.78173%2040.5834%206.51012%2036.5683V36.5683C4.60001%2030.5372%208.26394%2024.1187%2014.4427%2022.7601V22.7601C18.549%2021.8571%2021.7601%2018.6142%2022.6538%2014.5059V14.5059C23.9967%208.33184%2030.3771%204.60343%2036.3946%206.53009V6.53009C40.395%207.81091%2044.7761%206.63326%2047.5966%203.52066V3.52066Z%22%20fill%3D%22var(--fill-0%2C%20%237A299C)%22%2F%3E%0A%3C%2Fsvg%3E%0A');
+        -webkit-mask-repeat: no-repeat;
+        mask-repeat: no-repeat;
+        -webkit-mask-position: center;
+        mask-position: center;
+        -webkit-mask-size: 107.984px 108.642px;
+        mask-size: 107.984px 108.642px;
+        display: block;
+        height: auto;
+        overflow: hidden;
+        z-index: 8;
+    }
+
+    .masked-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+        backface-visibility: hidden;
+    }
+
+    .envelope-btn {
+        position: relative;
+        padding: 11px 40px;
+        background: transparent;
+        border: 3px solid var(--purple);
+        border-radius: 28px;
+        color: var(--purple);
+        font-size: 16px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 220ms ease;
+        z-index: 20;
+        pointer-events: auto;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+
+    .envelope-btn:hover {
+        background: var(--pink);
+        color: #fff;
+        transform: translateY(-1px);
+    }
+
+    @media (max-width: 900px) {
+        .waves-right, .waves-left {
+            width: clamp(280px, 45vw, 520px);
+            right: -8vw;
+            left: -8vw;
+            top: -25vh;
+        }
+    }
+
+    /* -- SECTION 2: THE NOTE --- */
+
+    #stage {
+        position: absolute;
+        width: 30rem;
+        height: 19rem;
+        margin: 50px auto;
+        perspective: 1200px;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%) scale(0.1);
+        transition: all 1s ease-in-out;
+        visibility: hidden;
+        z-index: 5;
+    }
+
+    #stage.emerge {
+        visibility: visible;
+        transform: translate(-50%, -120%) scale(1);
+    }
+
+    .content-clipper {
+        position: absolute;
+        width: 30rem;
+        height: 19rem;
+        top: 0;
+        left: 0;
+        pointer-events: none;
+        z-index: 5; /* Higher than the paper background */
+    }
+
+    .message {
+        margin-top: 3.5rem;
+        font-family: "Handlee", cursive;
+        font-size: 2.2rem;
+        color: #444;
+        text-align: center;
+        width: 100%;
+        opacity: 0;
+        animation: revealText 0.8s 2.2s ease-in forwards;
+        /* Hidden until the second fold starts */
+    }
+
+    @keyframes revealText {
+        0% { opacity: 0; }
+        100% { opacity: 1; }
+    }
+
+    .ruled { 
+        background-color: rgb(248, 234, 105); 
+        background-size: 30rem auto; 
+        background-image: repeating-linear-gradient(transparent 0, transparent 1rem, skyblue 0, skyblue 1.1rem); 
+        position: relative;
+        width: 100%;
+        height: 100%;
+    }
+
+    .fold-box { 
+        position: absolute; 
+        width: 15rem; 
+        height: 9.5rem; 
+        overflow: hidden; 
+        transition: all 0.4s;
+    }
+
+    /* Top Left - Base */
+    .fold-box:nth-child(2) { top: 0; left: 0; z-index: 1; }
+
+    /* Top Right - Unfolds side */
+    .fold-box:nth-child(3) {
+        top: 0;
+        left: 15rem;
+        transform-origin: left;
+        transform: rotateY(180deg);
+        animation: foldY 1s 1s ease forwards;
+        z-index: 2;
+    }
+    .fold-box:nth-child(3) .ruled { background-position: -15rem 0; }
+
+    /* Bottom Left - Unfolds down */
+    .fold-box:nth-child(4) {
+        top: 9.5rem;
+        left: 0;
+        opacity: 0;
+        transform-origin: top;
+        transform: rotateX(180deg);
+        animation: foldX 3s 2s ease forwards;
+        z-index: 3;
+    }
+    .fold-box:nth-child(4) .ruled { background-position: 0 -9.5rem; }
+
+    /* Bottom Right - Unfolds down */
+    .fold-box:nth-child(5) {
+        top: 9.5rem;
+        left: 15rem;
+        opacity: 0;
+        transform-origin: top;
+        transform: rotateX(180deg);
+        animation: foldX 3s 2s ease forwards;
+        z-index: 3;
+    }
+    .fold-box:nth-child(5) .ruled { background-position: -15rem -9.5rem; }
+
+    @keyframes foldY {
+        100% { transform: rotateY(360deg); }
+    }
+    @keyframes foldX {
+        0% { opacity: 1; }
+        100% { opacity: 1; transform: rotateX(0deg); }
+    }
+
+    .interaction-layer {
+        position: absolute;
+        bottom: 4rem;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        gap: 4rem;
+        z-index: 200;
+        opacity: 0;
+        pointer-events: none;
+        animation: smoothFadeIn 0.8s 3s ease-out forwards;
+    }
+
+    @keyframes smoothFadeIn { 
+        from { opacity: 0;}
+        to { opacity: 1; pointer-events: auto; } 
+    }
+
+    #yesBtn { background: #ff4d6d; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; transition: transform 0.2s; font-size: 1.2rem; }
+    #noBtn { background: #ccc; color: #333; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; font-size: 1rem; }
+
+    #stage:not(.emerge) .fold-box,
+    #stage:not(.emerge) .message,
+    #stage:not(.emerge) .interaction-layer {
+        animation:none !important;
+    }
+
+    /* --- SECTION 3: THE GALLERY --- */
+    .gallery-section {
+        min-height: 100vh;
+        padding: 100px 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        background: linear-gradient(to bottom, #1e003c, #2d005a);
+        position: relative;
+        padding-top: 80px;
+    }
+
+    .message {
+        color: var(--pink);
+        font-size: clamp(2 rem, 5vw, 4rem);
+        text-align: center;
+        max-width: 800px;
+        margin-bottom: 60px;
+        padding: 0 20px;
+        line-height: 1.2;
+    }
+
+    .carousel-container {
+        width: 100%;
+        overflow: hidden;
+        padding: 20px 0;
+        z-index: 4;
+        opacity: 0;
+        transform: translateX(100%);
+        transition: all 2.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+
+    .carousel-container.appear {
+        opacity: 1;
+        transform: translateX(0) rotate(-3deg);
+    }
+
+    .carousel-track {
+        display: flex;
+        width: max-content;
+        transform: translateX(0);
+    }
+
+    .carousel-track.scrolling {
+        animation: slideLeft 30s linear infinite;
+    }
+
+    .carousel-track.dragging {
+        transition: none;
+    }
+
+    @keyframes slideLeft {
+        0% {
+            transform: translateX(0);
+        }
+
+        100% {
+            transform: translateX(-50%);
+        }
+    }
+
+    .photo-card {
+        flex-shrink: 0;
+        width: 300px;
+        height: 300px;
+        border: 8px solid var(--purple);
+        border-radius: 15px;
+        overflow: hidden;
+        background: #000;
+        margin-right: 20px;
+    }
+
+    .photo-card img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    /* Flying Photo Animation */
+    .flying-photo {
+        position: fixed;
+        width: 100px;
+        height: 100px;
+        border: 4px solid var(--pink);
+        z-index: 100;
+        pointer-events: none;
+        transition: all 1s cubic-bezier(0.45, 0, 0.55, 1);
+    }
+    
+    .messages-container {
+        position: relative;
+        width: 100%;
+        min-height: 250px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-bottom: 30px;
+    }
+
+        /* Styling for the message */
+    .messages {
+        position: absolute;
+        display: block;
+        opacity: 0;
+        font-family: "TAN Tangkiwood", sans-serif;
+        font-size: clamp(1.8rem, 4vw, 2.8rem);
+        color: var(--pink);
+        text-align: center;
+        width: 80%;
+        pointer-events: none;
+        transition: opacity 1s ease-in-out;
+        visibility: hidden;
+        z-index: 9;
+    }
+
+    .messages.dramatic-line {
+        transition: opacity 5s ease-in-out;
+    }
+
+    /* Class to trigger the fade */
+    .messages.active {
+        opacity: 1;
+        visibility: visible;
+    }
+
+  </style>
+</head>
+<body>
+        <div class="waves-right">
+          <svg width="100%" height="100%" viewBox="0 0 1222.4 2349.41" fill="none" preserveAspectRatio="none">
+              <g>
+                  <path d="M335.139 657.252C119.201 250.89 933.511 -237.015 947.214 307.702C960.917 852.419 1034.66 1389.92 472.819 1750.87C350.808 1692.27 -119.794 1451.48 230.661 1165.23C450.839 1040.18 454.366 815.863 335.139 657.252Z" fill="url(#paint0_linear_right)" stroke="#1E003C"/>
+                  <path d="M277.139 971.252C61.2013 564.89 875.511 76.9846 889.214 621.702C902.917 1166.42 976.66 1703.92 414.819 2064.87C292.808 2006.27 -177.794 1765.48 172.661 1479.23C392.839 1354.18 396.366 1129.86 277.139 971.252Z" fill="url(#paint1_linear_right)" opacity="0.7"/>
+                  <path d="M395.139 1112.25C179.201 705.89 993.511 217.985 1007.21 762.702C1020.92 1307.42 1094.66 1844.92 532.819 2205.87C410.808 2147.27 -59.7944 1906.48 290.661 1620.23C510.839 1495.18 514.366 1270.86 395.139 1112.25Z" fill="url(#paint2_linear_right)" opacity="0.7"/>
+                  <path d="M492.139 1206.25C276.201 799.89 1090.51 311.985 1104.21 856.702C1117.92 1401.42 1191.66 1938.92 629.819 2299.87C507.808 2241.27 37.2056 2000.48 387.661 1714.23C607.839 1589.18 611.366 1364.86 492.139 1206.25Z" fill="url(#paint3_linear_right)" opacity="0.7"/>
+              </g>
+              <defs>
+                  <linearGradient id="paint0_linear_right" x1="-178" y1="276.5" x2="846.313" y2="289.582" gradientUnits="userSpaceOnUse">
+                      <stop stop-color="#9B36C5"/><stop offset="1" stop-color="#1E003C"/>
+                  </linearGradient>
+                  <linearGradient id="paint1_linear_right" x1="134" y1="563" x2="624.256" y2="601.958" gradientUnits="userSpaceOnUse">
+                      <stop offset="0.121739" stop-color="#FF6EB7"/><stop offset="1" stop-color="#1E003C"/>
+                  </linearGradient>
+                  <linearGradient id="paint2_linear_right" x1="252" y1="704" x2="742.256" y2="742.958" gradientUnits="userSpaceOnUse">
+                      <stop offset="0.121739" stop-color="#FF6EB7"/><stop offset="1" stop-color="#1E003C"/>
+                  </linearGradient>
+                  <linearGradient id="paint3_linear_right" x1="349" y1="798" x2="839.256" y2="836.958" gradientUnits="userSpaceOnUse">
+                      <stop offset="0.121739" stop-color="#FF6EB7"/><stop offset="1" stop-color="#1E003C"/>
+                  </linearGradient>
+              </defs>
+          </svg>
+      </div>
+
+      <div class="waves-left">
+          <svg width="100%" height="100%" viewBox="0 0 1222.4 2349.41" fill="none" preserveAspectRatio="none">
+              <g>
+                  <path d="M335.139 657.252C119.201 250.89 933.511 -237.015 947.214 307.702C960.917 852.419 1034.66 1389.92 472.819 1750.87C350.808 1692.27 -119.794 1451.48 230.661 1165.23C450.839 1040.18 454.366 815.863 335.139 657.252Z" fill="url(#paint0_linear_left)" stroke="#1E003C"/>
+                  <path d="M277.139 971.252C61.2013 564.89 875.511 76.9846 889.214 621.702C902.917 1166.42 976.66 1703.92 414.819 2064.87C292.808 2006.27 -177.794 1765.48 172.661 1479.23C392.839 1354.18 396.366 1129.86 277.139 971.252Z" fill="url(#paint1_linear_left)" opacity="0.7"/>
+                  <path d="M395.139 1112.25C179.201 705.89 993.511 217.985 1007.21 762.702C1020.92 1307.42 1094.66 1844.92 532.819 2205.87C410.808 2147.27 -59.7944 1906.48 290.661 1620.23C510.839 1495.18 514.366 1270.86 395.139 1112.25Z" fill="url(#paint2_linear_left)" opacity="0.7"/>
+                  <path d="M492.139 1206.25C276.201 799.89 1090.51 311.985 1104.21 856.702C1117.92 1401.42 1191.66 1938.92 629.819 2299.87C507.808 2241.27 37.2056 2000.48 387.661 1714.23C607.839 1589.18 611.366 1364.86 492.139 1206.25Z" fill="url(#paint3_linear_left)" opacity="0.7"/>
+              </g>
+              <defs>
+                  <linearGradient id="paint0_linear_left" x1="-91.1019" y1="664.407" x2="722.121" y2="726.13" gradientUnits="userSpaceOnUse">
+                      <stop stop-color="#9B36C5"/><stop offset="1" stop-color="#1E003C"/>
+                  </linearGradient>
+                  <linearGradient id="paint1_linear_left" x1="134" y1="563" x2="624.256" y2="601.958" gradientUnits="userSpaceOnUse">
+                      <stop offset="0.121739" stop-color="#FF6EB7"/><stop offset="1" stop-color="#1E003C"/>
+                  </linearGradient>
+                  <linearGradient id="paint2_linear_left" x1="252" y1="704" x2="742.256" y2="742.958" gradientUnits="userSpaceOnUse">
+                      <stop offset="0.121739" stop-color="#FF6EB7"/><stop offset="1" stop-color="#1E003C"/>
+                  </linearGradient>
+                  <linearGradient id="paint3_linear_left" x1="349" y1="798" x2="839.256" y2="836.958" gradientUnits="userSpaceOnUse">
+                      <stop offset="0.121739" stop-color="#FF6EB7"/><stop offset="1" stop-color="#1E003C"/>
+                  </linearGradient>
+              </defs>
+          </svg>
+      </div>
+  <div class="container">
+      <div class="mail-card">
+          <div class="envelope">
+              <div class="envelope-border">
+                <div id="stage" class="paper">
+                    <div id="frame"></div>
+                    
+                    <div class="fold-box">
+                        <div class="in ruled">
+                            <div class="content-clipper">
+                                <h1 class="message">Will you be my Valentine?</h1>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="fold-box">
+                        <div class="in ruled">
+                            <div class="content-clipper" style="left: -15rem;">
+                                <h1 class="message">Will you be my Valentine?</h1>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="fold-box">
+                        <div class="in ruled">
+                            <div class="content-clipper" style="top: -9.5rem;">
+                                <h1 class="message">Will you be my Valentine?</h1>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="fold-box">
+                        <div class="in ruled">
+                            <div class="content-clipper" style="left: -15rem; top: -9.5rem;">
+                                <h1 class="message">Will you be my Valentine?</h1>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="interaction-layer">
+                        <button id="yesBtn">Yes</button>
+                        <button id="noBtn">No</button>
+                    </div>
+                </div>
+                  <div class="flap-affiliated" aria-hidden="true">
+                      <div class="flap"></div>
+
+                      <svg class="envelope-lines" viewBox="-1 13 100 60" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                          <linearGradient id="line_grad_l" x1="0" y1="0.5" x2="1" y2="0.5">
+                            <stop offset="0.2" stop-color="#FF6EB7"/><stop offset="1" stop-color="#7A299C"/>
+                          </linearGradient>
+                          <linearGradient id="line_grad_r" x1="0" y1="0.5" x2="1" y2="0.5">
+                            <stop offset="0" stop-color="#7A299C"/><stop offset="1" stop-color="#FF6EB7"/>
+                          </linearGradient>
+                        </defs>
+                        <line x1="1" y1="14" x2="50" y2="50" stroke="url(#line_grad_l)" stroke-width="4" stroke-linecap="round" />
+                        <line x1="97" y1="14" x2="50" y2="50" stroke="url(#line_grad_r)" stroke-width="4" stroke-linecap="round" />
+                      </svg>
+
+                      <div class="star-container" id="star">
+                          <div class="star-inner">
+                              <svg width="132.84" height="133.565" viewBox="0 0 121.469 122.092" fill="none">
+                                  <path d="M52.0479 3.84992C56.6994 -1.28331 64.7693 -1.28331 69.4208 3.84992V3.84992C72.5051 7.25362 77.2959 8.5414 81.6704 7.1408V7.1408C88.2507 5.03396 95.2278 9.11105 96.6963 15.8625V15.8625C97.6735 20.3551 101.185 23.9012 105.675 24.8886V24.8886C112.432 26.3744 116.439 33.3931 114.35 39.9882V39.9882C112.959 44.3788 114.232 49.2086 117.628 52.3195V52.3195C122.749 57.0105 122.749 65.082 117.628 69.7729V69.7729C114.232 72.8839 112.959 77.7136 114.35 82.1042V82.1042C116.439 88.6993 112.432 95.7181 105.675 97.2038V97.2038C101.185 98.1912 97.6735 101.737 96.6963 106.23V106.23C95.2278 112.981 88.2507 117.058 81.6704 114.952V114.952C77.2959 113.551 72.5051 114.839 69.4208 118.243V118.243C64.7693 123.376 56.6994 123.376 52.0479 118.243V118.243C48.9636 114.839 44.1728 113.551 39.7983 114.952V114.952C33.218 117.058 26.241 112.981 24.7724 106.23V106.23C23.7952 101.737 20.2837 98.1912 15.7934 97.2038V97.2038C9.0368 95.7181 5.03021 88.6993 7.11896 82.1042V82.1042C8.5095 77.7136 7.23657 72.8839 3.8406 69.7729V69.7729C-1.2802 65.082 -1.2802 57.0105 3.84059 52.3195V52.3195C7.23657 49.2086 8.5095 44.3788 7.11896 39.9882V39.9882C5.03021 33.3931 9.0368 26.3744 15.7934 24.8886V24.8886C20.2837 23.9012 23.7952 20.3551 24.7724 15.8625V15.8625C26.241 9.11106 33.2181 5.03396 39.7983 7.1408V7.1408C44.1728 8.5414 48.9636 7.25362 52.0479 3.84992V3.84992Z" fill="#7A299C"/>
+                              </svg>
+                          </div>
+                      </div>
+
+                      <div class="mask-group" id="mask">
+                          <div class="masked-image">
+                              <img src="media/seal.JPEG" alt="Person">
+                          </div>
+                      </div>
+                  </div>
+
+                  <div class="inner" aria-hidden="true"></div>
+                  
+              </div>
+          </div>
+
+          <button id="openBtn" class="envelope-btn" type="button">OPEN ME</button>
+      </div>
+  </div>
+  <section class="gallery-section" id="gallery">
+    <div class="messages-container">
+        <span class="messages" id="line1" data-duration="4000">Hi baby, congratulations to us on our third Valentine's!</span>
+        <span class="messages" id="line2" data-duration="3000">I just have some things to say to you.</span>
+        <span class="messages" id="line3" data-duration="6000">I have loved you since the day that I met you, and I will love you the rest of my life.</span>
+        <span class="messages" id="line4" data-duration="5000">Honestly, falling in love with you was the easiest thing I've ever done.</span>
+        <span class="messages" id="line5" data-duration="5000">Nothing matters to me but you. Where am I if you're not there?</span>
+        <span class="messages" id="line6" data-duration="6000">I want you to know that whenever I say "Hmm" during conversations what I really mean is "Hug me more",</span>
+        <span class="messages" id="line7" data-duration="6000">when I say "Ok" I mean "One kiss", and when I say "Mm" what I mean is "Marry me."</span>
+        <span class="messages" id="line8" data-duration="4000">I mean it too that whenever I see your face,</span>
+        <span class="messages" id="line9" data-duration="6000">I see a wrinkled face and grey hair with my hands on your cheek on a headcradle.</span>
+        <span class="messages dramatic-line" id="line10" data-duration="10000">Lastly, I just wanted to let you know that your love will forever be unforgettable.</span>
+    </div>
+
+    <div class="carousel-container" id="carousel">
+        <div class="carousel-track" id="track">
+
+        </div>
+    </div>
+  </section>
+  <audio id="bgMusic">
+    <source src="music/Daniel_Caesar_-_Who_Knows.mp3" type="audio/mpeg">
+  </audio>
+    
+    <audio id="openSound" src="music/envelope.mp3" preload="auto"></audio>
+    <audio id="closeSound" src="music/envelope.mp3" preload="auto"></audio>
+    <audio id="foldSound" src="music/paperFolding.mp3" preload="auto"></audio>
+
+  </audio>
+</body>
+    <script>
+    const photoSources = [
+        'media/First-Photo-Cheez1.JPEG',
+        'media/First-Photo-Cheez2.JPEG',
+        'media/First-Photo-Cheez3.JPEG',
+        'media/First-Photo-Cheez4.JPEG',
+        'media/First-Photo-Cheez5.JPEG',
+        'media/First-Photo-Cheez6.JPEG',
+        'media/First-Photo-Haru1.JPG',
+        'media/First-Photo-Haru2.JPG',
+        'media/First-Photo-Haru3.JPG',
+        'media/First-Photo-Haru4.JPG',
+        'media/First-Photo-Haru5.JPG',
+        'media/First-Photo-Seouling1.JPG',
+        'media/First-Photo-Seouling2.JPG',
+        'media/First-Photo-Seouling3.JPG',
+        'media/First-Photo-Seouling4.JPG',
+        'media/Random-Photo1.JPEG',
+        'media/Random-Photo2.JPEG',
+        'media/Random-Photo3.JPEG',
+        'media/Random-Photo4.JPEG',
+        'media/Second-Photo-Cheez1.JPEG',
+        'media/Second-Photo-Cheez2.JPEG',
+        'media/Second-Photo-Cheez3.JPEG',
+        'media/Second-Photo-Cheez4.JPEG',
+        'media/Second-Photo-Haru1.JPG',
+        'media/Second-Photo-Haru2.JPG',
+        'media/Second-Photo-Haru3.JPG',
+        'media/Second-Photo-Haru4.JPG',
+        'media/Second-Photo-Seouling1.JPG',
+        'media/Second-Photo-Seouling2.JPG',
+        'media/Second-Photo-Seouling3.JPG',
+        'media/Second-Photo-Seouling4.JPG',
+        'media/Second-Photo-Seouling5.JPG',
+        'media/Second-Photo-Seouling6.JPG',
+        'media/Third-Photo-Haru1.JPG',
+        'media/Third-Photo-Haru2.JPG',
+        'media/Third-Photo-Haru3.JPG',
+        'media/Third-Photo-Haru4.JPG',
+    ];
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const track = document.getElementById('track');
+        const carousel = document.getElementById('carousel');
+        const envelope = document.querySelector('.envelope');
+        const btn = document.getElementById('openBtn');
+        const stage = document.getElementById('stage');
+        const yesBtn = document.getElementById('yesBtn');
+        const noBtn = document.getElementById('noBtn');
+        const MAX_SCALE = 5;
+        const body = document.body;
+        const html = document.documentElement;
+        const music = document.getElementById('bgMusic');
+        const totalHeight = Math.max(
+            body.scrollHeight, body.offsetHeight, html.clientHeight, html.scrollHeight, html.offsetHeight
+        );
+        const openSound = document.getElementById('openSound');
+        const closeSound = document.getElementById('closeSound');
+        const foldSound = document.getElementById('foldSound');
+
+        let isDown = false;
+        let startX;
+        let currentTranslate = 0;
+        let prevTranslate = 0;
+        let scale = 1;
+        let yesScale = 1;
+        
+        music.loop = true;
+
+        // Set volumes for SFX (usually louder than background music)
+        openSound.volume = 0.5;
+        closeSound.volume = 0.5;
+        foldSound.volume = 0.4;
+        music.volume = 0.08;
+
+        document.addEventListener('load', () => {
+            setTimeout(() => {
+                music.play();
+                shuffleGallery();
+            });
+            }, 500);
+
+        document.addEventListener('click', () => {
+            music.play();
+            { once: true};
+        });
+
+        // 1. Initialize Gallery with Triple Buffer for Infinite Loop
+        function renderGallery() {
+            
+            const track = document.getElementById('track');
+            if (!track) return;
+
+            track.innerHTML = '';
+            const currentList = [...photoSources];
+            
+            for(let i = currentList.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [currentList[i], currentList[j]] = [currentList[j], currentList[i]];
+            }
+
+            currentList.forEach(url => {
+                const card = document.createElement('div');
+                card.className = 'photo-card';
+                card.innerHTML = `<img src="${url}" draggable="false">`;
+                track.appendChild(card);
+            });
+
+            currentList.forEach(url => {
+                const card = document.createElement('div');
+                card.className = 'photo-card';
+                card.innerHTML = `<img src="${url}" draggable="false">`;
+                track.appendChild(card);
+            });
+        }
+        
+        renderGallery();
+
+        // 2. The "Open Envelope" Logic
+        btn.addEventListener('click', () => {
+            const isOpen = envelope.classList.toggle('open');
+            btn.textContent = isOpen ? 'CLOSE' : 'OPEN ME';
+            
+            if (isOpen) {
+                openSound.play();
+                burstHeartsFromEnvelope(envelope);
+
+                setTimeout(() => {
+                    stage.classList.add('emerge');
+                    foldSound.currentTime = 0;
+                    foldSound.play();
+                }, 600);   
+                
+                setTimeout(() => {
+                    const secondFold = foldSound.cloneNode();
+                    secondFold.volume = 0.4;
+                    secondFold.play();
+                }, 2000);
+
+                setTimeout(() => {
+                    const thirdFold = foldSound.cloneNode();
+                    thirdFold.volume = 0.4;
+                    thirdFold.play();
+                }, 3800);
+
+            } else {
+                closeSound.play();
+                stage.classList.remove('emerge');
+                carousel.classList.remove('appear');
+                track.classList.remove('scrolling');
+                clearTimeout(window.messageTimeout);
+                const messages = document.querySelectorAll('.messages');
+                messages.forEach(msg => {
+                    msg.classList.remove('active');
+                });
+
+                window.scrollTo({ top: 0, behavior: 'smooth'});
+            }
+        });
+
+        noBtn.addEventListener('click', () => {
+            yesScale += 0.2;
+            yesBtn.style.transform = `scale(${yesScale})`;
+
+            const rect = envelope.getBoundingClientRect();
+            const radius = 250;
+            noBtn.style.position = 'fixed';
+            const randomX = rect.left + (Math.random() - 0.5) * radius * 2;
+            const randomY = rect.top + (Math.random() - 0.5) * radius * 2;
+
+            noBtn.style.position = 'fixed';
+            noBtn.style.top = `${Math.max(20, Math.min(window.innerHeight - 40, randomY))}px`;
+            noBtn.style.left = `${Math.max(20, Math.min(window.innerWidth - 80, randomX))}px`;
+        });
+
+            yesBtn.addEventListener('click', () => {
+            // Reset scale and move to gallery
+            renderGallery();
+            yesScale = 1;
+            yesBtn.style.transform = `scale(1)`;
+            document.getElementById('gallery').scrollIntoView({ behavior: 'smooth'});
+            carousel.classList.add('appear');
+            track.classList.add('scrolling');
+
+            setTimeout(() => {
+                playMessageSequence();
+            }, 1000);
+        });
+
+        // --- HELPER FUNCTIONS ---
+
+        function playMessageSequence() {
+            const messages = document.querySelectorAll('.messages');
+            
+            messages.forEach(m => m.classList.remove('active'));
+            
+            let index = 0;
+
+            function next() {
+                // Hide the previous message
+                if (index > 0 && index < messages.length) {
+                    messages[index - 1].classList.remove('active');
+                }
+
+                // Show current message
+                if (index < messages.length) {
+                    const currentLine = messages[index];
+                    currentLine.classList.add('active');
+                    
+                    // Check if it's the last line w/ longer pause
+                    let duration = parseInt(currentLine.getAttribute('data-duration')) || 3000;
+                    
+                    index++;
+                    window.messageTimeout = setTimeout(next, duration);
+                }
+            }
+            next();
+        }
+
+        function flyPhotosFromEnvelope() {
+            const rect = envelope.getBoundingClientRect();
+            photoSources.forEach((url, i) => {
+                setTimeout(() => {
+                    const img = document.createElement('img');
+                    img.src = url;
+                    img.className = 'flying-photo';
+
+                    // start position center
+                    img.style.left = (rect.left + rect.width / 2 - 50) + 'px';
+                    img.style.top = (window.scrollY + rect.top) + 'px';
+                    document.body.appendChild(img);
+                    
+                    // animate out
+                    requestAnimationFrame(() => {
+                        img.style.transform = `translate(${(Math.random()- 0.5) * 400}px, -600px) rotate(${Math.random()*360}deg) scale(0)`;
+                        img.style.opacity = '0';
+                    });
+                    setTimeout(() => img.remove(), 1000);
+                }, i * 150);
+            });
+        }
+
+        function createHeart() {
+            const heart = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+            const size = 10 + Math.random() * 20;
+            heart.setAttribute('width', size);
+            heart.setAttribute('height', size);
+            heart.setAttribute('viewBox', '0 0 24 24');
+            heart.classList.add('heart');
+
+            heart.style.left = Math.random() * 100 + 'vw';
+
+            heart.style.top = Math.random() * totalHeight + 'px';
+            const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+            path.setAttribute('d', 'M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z');
+            heart.appendChild(path);
+            document.body.appendChild(heart);
+            setTimeout(() => heart.remove(), 4000);
+        }
+
+        setInterval(createHeart, 50);
+
+        function createBigHeartAt(x, y) {
+            const heart = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+            const size = 44 + Math.random() * 30;
+            heart.setAttribute('width', size);
+            heart.setAttribute('height', size);
+            heart.setAttribute('viewBox', '0 0 24 24');
+            heart.classList.add('heart', 'big');
+            heart.style.left = `${x - size / 2}px`;
+            heart.style.top = `${y - size / 2}px`;
+            const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+            path.setAttribute('d', 'M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z');
+            heart.appendChild(path);
+            document.body.appendChild(heart);
+            setTimeout(() => heart.remove(), 4500);
+        }
+
+        function burstHeartsFromEnvelope(envelopeEl, count = 12) {
+            const rect = envelopeEl.getBoundingClientRect();
+            for (let i = 0; i < count; i++) {
+                setTimeout(() => {
+                    const randomX = rect.left + (Math.random() * rect.width);
+                    const randomY = rect.top + (Math.random() * rect.height);
+                    createBigHeartAt(randomX, window.scrollY + randomY);
+                }, i * 100);
+            }
+        }
+
+    });
+
+    </script>
+</html>
